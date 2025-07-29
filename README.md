@@ -42,7 +42,7 @@ This project provides a task management system for HMCTS caseworkers. It include
 
 - Java 17+
 - Gradle
-- SQLite (optional for inspecting the DB)
+- SQLiteBrowser (optional for inspecting the DB)
 
 #### Frontend:
 
@@ -60,6 +60,9 @@ This project provides a task management system for HMCTS caseworkers. It include
    ```bash
    ./gradlew build
    ```
+   (You may need to set your execution flag with  `chmod +x gradlew`).
+
+
 3. Run the application:
    ```bash
    ./gradlew bootRun
