@@ -1,45 +1,140 @@
-# DTS Developer Technical Test
+## HMCTS Task Manager
 
-## Objective
-To assess your ability to build a simple API and frontend using best coding practices.
+### Project Overview
 
-## Scenario
-HMCTS requires a new system to be developed so caseworkers can keep track of their tasks. Your technical test is to develop that new system so caseworkers can efficiently manage their tasks.
-Test push
-## Task Requirements
+This project provides a task management system for HMCTS caseworkers. It includes:
 
-### Backend API
-The backend should be able to:
-- Create a task with the following properties:
-  - Title
-  - Description (optional field)
-  - Status
-  - Due date/time
-- Retrieve a task by ID
-- Retrieve all tasks
-- Update the status of a task
-- Delete a task
+- A **Spring Boot** backend API for creating, updating, retrieving, and deleting tasks.
+- A **Flask** frontend for interacting with tasks through a web interface.
+- A **SQLite** database to persist tasks locally.
+- Integrated **validation**, **unit tests**, and **clean UI styling**.
 
-### Frontend Application
-The frontend should be able to:
-- Create, view, update, and delete tasks
-- Display tasks in a user-friendly interface
+---
 
-## Technical Requirements
-Here are a few starter repositories if you would like to use our tech stack:
-- [Backend Starter Repo](https://github.com/hmcts/hmcts-dev-test-backend)
-- [Frontend Starter Repo](https://github.com/hmcts/hmcts-dev-test-frontend)
+### Technical Stack
 
-You can use any language you are comfortable with or our own stack:
-- **Backend**: Any language or framework of your choice
-- **Frontend**: Any language or framework of your choice
-- Implement **unit tests**
-- Store data in a **database**
-- Include **validation and error handling**
-- **Document API endpoints**
+#### Backend:
 
-## Submission Guidelines
-- Create repositories on GitHub and add add the links to your application
-- Include a helpful `README.md`!
+- Java 17
+- Spring Boot
+- Spring Data JPA (with SQLite)
+- Hibernate Validator
+- JUnit 5
 
-Happy coding!
+#### Frontend:
+
+- Python 3.8+
+- Flask
+- HTML/CSS
+- Jinja2 templating
+
+#### Testing:
+
+- JUnit 5 (Backend)
+- Selenium (Frontend validation)
+- Hibernate Validator (Model validation)
+
+---
+
+### Prerequisites
+
+#### Backend:
+
+- Java 17+
+- Gradle
+- SQLite (optional for inspecting the DB)
+
+#### Frontend:
+
+- Python 3.8+
+- pip / virtualenv
+
+---
+
+### Setup and Installation
+
+#### Backend:
+
+1. Navigate to the backend directory.
+2. Build the project:
+   ```bash
+   ./gradlew build
+   ```
+3. Run the application:
+   ```bash
+   ./gradlew bootRun
+   ```
+4. The backend API will be available at `http://localhost:8080/api/tasks`.
+
+#### Frontend:
+
+1. Navigate to the frontend directory.
+2. Set up a virtual environment:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Start the Flask server:
+   ```bash
+   python app.py
+   ```
+5. Visit `http://localhost:5000` in your browser.
+
+---
+
+### Running the Application with Database Support
+
+The Flask frontend uses SQLite through SQLAlchemy to store tasks locally for searching and rendering.
+To initialize the database:
+
+1. Start the db up with:
+
+   ```bash
+   python init_db.py
+   ```
+
+The database file (`tasks.db`) will be created in the root directory.
+
+---
+
+### Running Tests
+
+#### Backend Tests:
+
+From the backend project root, run:
+
+```bash
+./gradlew test
+```
+
+Includes:
+
+- Unit tests for `TaskManagerControllerTest`, `TaskValidationTest`
+- Model validation tests for `Task` fields (`@NotBlank`, `@NotNull`)
+
+#### Frontend Tests:
+
+Ensure the Flask app is running, navigate to the test folder, then run the Selenium tests:
+
+```bash
+python test_validation.py
+```
+
+> Requires [ChromeDriver](https://chromedriver.chromium.org/downloads) in your PATH.
+
+---
+
+### Endpoints:
+
+| Method | Endpoint       | Description               |
+| ------ | -------------- | ------------------------- |
+| POST   | `/`            | Create a new task         |
+| GET    | `/`            | Get all tasks             |
+| GET    | `/{id}`        | Get a specific task by ID |
+| PUT    | `/{id}/status` | Update task status        |
+| DELETE | `/{id}`        | Delete a task by ID       |
+
