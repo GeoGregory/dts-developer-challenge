@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Task</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+<h1>Create Task</h1>
+<form method="post" action="/create" onsubmit="return validateForm()">
+  <label for="title"><b>Title</b></label><br>
+  <input name="title" id="title" placeholder="Title for task" required><br>
+  <div class="error" id="titleError"></div>
+
+  <label for="description"><b>Description</b></label><br>
+  <input name="description" id="description" placeholder="Description for task"><br>
+  <div class="error" id="descriptionError"></div>
+
+  <label for="status"><b>Status</b></label><br>
+  <select id="status" name="status" required><br>
+    <option value="Pending">Pending</option>
+    <option value="In progress">In Progress</option>
+    <option value="Done">Done</option>
+  </select><br>
+
+  <label for="dueDate"><b>Due Date & Time</b></label><br>
+  <input name="dueDate" id="dueDate" type="datetime-local" required><br>
+  <div class="error" id="dueDateError"></div>
+
+  <button type="submit" class="green-button">Add Task</button>
+</form>
+
+<a href="/" class="red-button">Back to All Tasks</a>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<ul class="flashes">
+  {% for category, message in messages %}
+  <li class="{{ category }}">{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+<script>
+  function validateForm() {
+    let valid = true;
+
+    document.getElementById("titleError").innerText = "";
+    document.getElementById("descriptionError").innerText = "";
+    document.getElementById("dueDateError").innerText = "";
+
+    const title = document.getElementById("title").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const dueDate = document.getElementById("dueDate").value;
+    const specialCharPattern = /[~`!@#$%^&*()+={}[\]:;"'<>,.?/\\|_-]/;
+
+    // Validate title
+    if (!title || title.length === 0) {
+      document.getElementById("titleError").innerText = "Title cannot be empty.";
+      valid = false;
+    } else if (specialCharPattern.test(title)) {
+      document.getElementById("titleError").innerText = "Title cannot contain special characters.";
+      valid = false;
+    }
+
+    // Validate description
+    if (description.length > 0 && specialCharPattern.test(description)) {
+      document.getElementById("descriptionError").innerText = "Description cannot contain special characters.";
+      valid = false;
+    }
+
+    // Validate that the due date is in the future
+    const now = new Date();
+    const selected = new Date(dueDate);
+    if (selected <= now) {
+      document.getElementById("dueDateError").innerText = "Due date must be in the future.";
+      valid = false;
+    }
+    return valid;
+  }
+</script>
+</body>
+</html>

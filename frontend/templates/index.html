@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HMCTS Task Manager</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <h1>All Tasks</h1>
+  <form method="get" action="/">
+    <input name="search_id" type="number" min="1" placeholder="Search by ID">
+    <button type="submit">Search</button>
+    <a href="/" class="red-button">Clear</a>
+  </form>
+  <a href="/create" class="green-button">Create New Task</a>
+
+  {% for task in tasks %}
+  <div class="task">
+    <p><strong>Title:</strong> {{ task.title }}</p>
+    <p><strong>Status:</strong> {{ task.status }}</p>
+    {% if task.description %}
+    <p><strong>Description:</strong> {{ task.description }}</p>
+    {% endif %}
+    <p><strong>Due:</strong> {{ task.due_date.strftime('%d/%m/%Y %H:%M') }}</p>
+    <form method="post" action="/update/{{ task.id }}">
+      <select name="status">
+        <option value="Pending" {% if task.status == 'Pending' %}selected{% endif %}>Pending</option>
+        <option value="In progress" {% if task.status == 'In progress' %}selected{% endif %}>In Progress</option>
+        <option value="Done" {% if task.status == 'Done' %}selected{% endif %}>Done</option>
+      </select>
+      <button type="submit">Update Status</button>
+      <a href="/delete/{{ task.id }}" class="red-button">Delete</a>
+    </form>
+  </div>
+  {% endfor %}
+
+  {% if not_found %}
+  <p style="color: red;">No task found with that ID.</p>
+  {% endif %}
+
+</body>
+</html>
