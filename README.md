@@ -140,4 +140,3 @@ python test_validation.py
 | GET    | `/{id}`        | Get a specific task by ID |
 | PUT    | `/{id}/status` | Update task status        |
 | DELETE | `/{id}`        | Delete a task by ID       |
-
