@@ -12,8 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -35,7 +40,7 @@ public class TaskManagerControllerTest {
 
     @Test
     void createTask() throws Exception {
-        com.hmcts.taskmanager.model.Task task = new Task(
+        Task task = new Task(
                 "Test Task",
                 "Sample description",
                 "pending",
@@ -108,5 +113,14 @@ public class TaskManagerControllerTest {
 
         mockMvc.perform(get("/api/tasks/" + task.getId()))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldReturn404WhenTaskNotFound() throws Exception {
+        // Given no task added to the db, look for a task
+        long taskId = 404;
+        mockMvc.perform(get("/api/tasks/" + taskId))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Task not found with id: 404"));
     }
 }
